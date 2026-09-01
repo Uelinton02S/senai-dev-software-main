@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Minha API - Desenvolvimento de Sistemas
 
 API REST desenvolvida em C# com ASP.NET Core como atividade prática da disciplina de Desenvolvimento de Sistemas, do III Módulo do Curso Técnico em Desenvolvimento de Sistemas.
@@ -128,3 +129,7 @@ Instituição: SENAI
 Thiago Silva
 
 Projeto desenvolvido para fins acadêmicos.
+=======
+# III Módulo do Curso Técnico em Desenvolvimento de Sistemas
+Disciplina Desenvolvimento de Sistemas
+>>>>>>> 8734f2800096dd820fb80d63284ea20c84bb6caf

@@ -1,48 +1,67 @@
 using MinhaApi.Models;
-using MinhaApi.Services;
 using MinhaApi.Repositories;
+
+namespace MinhaApi.Services;
+
+public interface IProdutoService
+{
+IEnumerable<Produto> GetAll();
+Produto? GetById(int id);
+Produto Create(Produto produto);
+Produto? Update(int id, Produto produto);
+bool Delete(int id);
+}
+
 public class ProdutoService : IProdutoService
 {
-    private readonly IProdutoRepository _repo;
+private readonly IProdutoRepository _repo;
 
-    public ProdutoService(IProdutoRepository repo) => _repo = repo;
 
-    public IEnumerable<Produto> GetAll() => _repo.GetAll();
+public ProdutoService(IProdutoRepository repo)
+{
+    _repo = repo;
+}
 
-    public Produto? GetById(int id) => _repo.GetById(id);
+public IEnumerable<Produto> GetAll()
+{
+    return _repo.GetAll();
+}
 
-    public Produto Create(Produto produto)
-    {
-        if (produto.Preco < 0)
-            throw new ArgumentException("Preço inválido!");
-        _repo.Add(produto);
-        return produto;
-    }
+public Produto? GetById(int id)
+{
+    return _repo.GetById(id);
+}
 
-    public Produto? Update(int id, Produto p)
-    {
-        if (_repo.GetById(id) == null) return null;
-        p.Id = id;
-        _repo.Update(p);
-        return p;
-    }
+public Produto Create(Produto produto)
+{
+    if (produto.Preco < 0)
+        throw new ArgumentException("Preço inválido");
+
+    _repo.Add(produto);
+
+    return produto;
+}
+
+public Produto? Update(int id, Produto produto)
+{
+    if (_repo.GetById(id) == null)
+        return null;
+
+    produto.Id = id;
+    _repo.Update(produto);
+
+    return produto;
+}
 
 public bool Delete(int id)
 {
-    var produto = _repo.GetById(id);
+    if (_repo.GetById(id) == null)
+        return false;
 
-    if (produto != null)
-    {
-        _repo.Delete(id);
-        return true;
-    }
+    _repo.Delete(id);
 
-    return false;
+    return true;
 }
 
 
-    bool IProdutoService.Delete(int id)
-    {
-        throw new NotImplementedException();
-    }
 }

@@ -1,66 +1,71 @@
-//using MinhaApi.Models;
-//using MinhaApi.Services;
-//using Microsoft.AspNetCore.Mvc;
+using MinhaApi.Services;
+using MinhaApi.Models;
+using Microsoft.AspNetCore.Mvc;
 
-//[ApiController]
-//[Route("api/[controller]")]
-//public class TipoController : ControllerBase
-//{
-//    private readonly ITipoService _service;
+[ApiController]
+[Route("api/[controller]")]
+public class TipoController : ControllerBase
+{
+private readonly ITipoService _service;
 
-//   public TipoController(ITipoService service) => _service = service;
 
-    //GETALL
-//    [HttpGet]
-//   public IActionResult GetAll()
-   // {
-//        var tipos = _service.GetAll();
-//        return Ok(tipos);
-  //  }
+public TipoController(ITipoService service)
+{
+    _service = service;
+}
 
-    //GET
-//    [HttpGet("{id}")]
-//    public IActionResult GetById(int id)
-   // {
-//        var tipo = _service.GetById(id);
-//        if (tipo == null)
-//           return NotFound();
-//        return Ok(tipo);
-  //  }
+// GET: api/tipo
+[HttpGet]
+public IActionResult GetAll()
+{
+    return Ok(_service.GetAll());
+}
 
-    //POST
-//    [HttpPost]
-//    public IActionResult Create([FromBody] Tipo tipo)
-    //{
-//        if (!ModelState.IsValid)
-//            return BadRequest(ModelState);
+// GET: api/tipo/1
+[HttpGet("{id}")]
+public IActionResult GetById(int id)
+{
+    var tipo = _service.GetById(id);
 
-//       var criado = _service.Create(tipo);
+    if (tipo == null)
+        return NotFound();
 
-//        return CreatedAtAction(nameof(GetById), new { id = criado.Id }, criado);
-//    }
+    return Ok(tipo);
+}
 
-    //PUT
-//    [HttpPut("{id}")]
-//    public IActionResult Update(int id, [FromBody] Tipo tipo)
-   //     {
-//            var atualizado = _service.Update(id, tipo);
+// POST: api/tipo
+[HttpPost]
+public IActionResult Create(Tipo tipo)
+{
+    var novoTipo = _service.Create(tipo);
 
-//           if (atualizado == null)
-//                return NotFound();
+    return CreatedAtAction(
+        nameof(GetById),
+        new { id = novoTipo.Id },
+        novoTipo
+    );
+}
 
-//           return Ok(atualizado);
-     //   }
+// PUT: api/tipo/1
+[HttpPut("{id}")]
+public IActionResult Update(int id, Tipo tipo)
+{
+    var tipoAtualizado = _service.Update(id, tipo);
 
-    //DELETE
-//    [HttpDelete("{id}")]
-    //public IActionResult Delete(int id)
-   // {
-    //    var deletado = _service.Delete(id);
+    if (tipoAtualizado == null)
+        return NotFound();
 
-//        if (!deletado)
-//            return NotFound();
+    return Ok(tipoAtualizado);
+}
 
-//        return NoContent();
-   // }
-//}
+// DELETE: api/tipo/1
+[HttpDelete("{id}")]
+public IActionResult Delete(int id)
+{
+    if (!_service.Delete(id))
+        return NotFound();
+
+    return NoContent();
+}
+
+}
