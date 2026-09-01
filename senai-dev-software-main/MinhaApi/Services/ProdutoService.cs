@@ -3,15 +3,6 @@ using MinhaApi.Repositories;
 
 namespace MinhaApi.Services;
 
-public interface IProdutoService
-{
-IEnumerable<Produto> GetAll();
-Produto? GetById(int id);
-Produto Create(Produto produto);
-Produto? Update(int id, Produto produto);
-bool Delete(int id);
-}
-
 public class ProdutoService : IProdutoService
 {
 private readonly IProdutoRepository _repo;
