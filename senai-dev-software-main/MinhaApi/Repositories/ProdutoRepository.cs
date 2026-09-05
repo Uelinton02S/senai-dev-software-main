@@ -58,14 +58,14 @@ public ProdutoRepository(IConfiguration config)
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
         string sql = @"UPDATE produtos 
-                        SET nome = @Nome, preco = @preco, estoque = estoque@, ativo = @Ativo 
-                        WHERE Id = @Id";
+                        SET nome = @Nome, preco = @preco, estoque = @Estoque, ativo = @Ativo 
+                        WHERE id = @Id";
         using var cmd = new MySqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@Id,",p.Id);    
-        cmd.Parameters.AddWithValue("@Nome,",p.Nome);
-        cmd.Parameters.AddWithValue("@Preço,",p.Preco);
-        cmd.Parameters.AddWithValue("@Estoque,",p.Estoque);
-        cmd.Parameters.AddWithValue("@Ativo,",p.Ativo);                          
+        cmd.Parameters.AddWithValue("@Id",p.Id);    
+        cmd.Parameters.AddWithValue("@Nome",p.Nome);
+        cmd.Parameters.AddWithValue("@Preço",p.Preco);
+        cmd.Parameters.AddWithValue("@Estoque",p.Estoque);
+        cmd.Parameters.AddWithValue("@Ativo",p.Ativo);                          
     }
     
 
@@ -78,4 +78,4 @@ public ProdutoRepository(IConfiguration config)
             cmd.Parameters.AddWithValue("@Id", id);
             cmd.ExecuteNonQuery();
         }
-        }
+}
