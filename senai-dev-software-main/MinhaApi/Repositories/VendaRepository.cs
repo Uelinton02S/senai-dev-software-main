@@ -5,12 +5,15 @@ using MinhaApi.Repositories;
 public class VendaRespository : IVendaRepository
 {
     private readonly string _connectionString;
-    private object _db;
 
     public VendaRespository(IConfiguration config)
 => _connectionString = config.GetConnectionString("DefaultConnection")!;
     
-    public
+    private static List<Venda> _db = new()
+    {
+        new Venda { id=1, data_venda=DateTime.Now, idclientes=1, idprodutos=1, quantidade=2 },
+        new Venda { id=2, data_venda=DateTime.Now, idclientes=2, idprodutos=2, quantidade=1 }
+    };
     IEnumerable<Venda> GetAll()
         {
             var lista = new List<Venda>();
@@ -49,5 +52,10 @@ public class VendaRespository : IVendaRepository
         cmd.Parameters.AddWithValue("@Id", venda.id);
 
         cmd.ExecuteNonQuery();
+    }
+
+    IEnumerable<Venda> IVendaRepository.GetAll()
+    {
+        return GetAll();
     }
 }
