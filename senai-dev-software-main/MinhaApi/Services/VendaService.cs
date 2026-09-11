@@ -22,9 +22,9 @@ public class VendaService : IVendaService
         return _repo.GetAll();
     }
 
-    public Venda? GetById(int id)
+    public void Add(Venda venda)
     {
-        return _repo.GetById(id);
+        _repo.Add(venda);
     }
 
     public Venda Update(Venda venda)

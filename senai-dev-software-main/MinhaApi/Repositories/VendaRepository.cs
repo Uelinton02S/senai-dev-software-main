@@ -20,7 +20,7 @@ public class VendaRespository : IVendaRepository
             using var conn = new MySqlConnection(_connectionString);
             conn.Open();
     
-            string sql = "SELECT id, data, cliente_id, produto_id, quantidade FROM vendas";
+            string sql = "SELECT id, data_venda, idclientes, idprodutos, quantidade FROM vendas";
             using var cmd = new MySqlCommand(sql, conn);
             using var reader = cmd.ExecuteReader();
     
@@ -29,28 +29,40 @@ public class VendaRespository : IVendaRepository
                 lista.Add(new Venda{
                     
                     id = reader.GetInt32("id"),
-                    data_venda = reader.GetDateTime("data"),
-                    idclientes = reader.GetInt32("cliente_id"),
-                    idprodutos = reader.GetInt32("produto_id"),
+                    data_venda = reader.GetDateTime("data_venda"),
+                    idclientes = reader.GetInt32("idclientes"),
+                    idprodutos = reader.GetInt32("idprodutos"),
                     quantidade = reader.GetInt32("quantidade")
                 });
             }
             return lista;
         }
-        public Venda? GetById(int id) => _db.FirstOrDefault(v => v.id == id);
+       public void Add(Venda venda) {
+        using var conn = new MySqlConnection(_connectionString);
+        conn.Open();
+        string sql = @"INSERT INTO vendas (data,idclientes, idprodutos, quantidade) 
+                       VALUES (@Data, @idclientes, @idprodutos, @Quantidade);
+                       SELECT LAST_INSERT_ID();";
+
+        using var cmd = new MySqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@Data", venda.data_venda);
+        cmd.Parameters.AddWithValue("@idclientes", venda.idclientes);
+        cmd.Parameters.AddWithValue("@idprodutos", venda.idprodutos);
+        cmd.Parameters.AddWithValue("@Quantidade", venda.quantidade);
+        cmd.ExecuteNonQuery();
+    }
       
       public void Update(Venda venda)
     {
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
-        string sql = @"UPDATE vendas SET data_venda = @Data, cliente_id = @ClienteId, produto_id = @ProdutoId, quantidade = @Quantidade WHERE id = @Id";
+        string sql = @"UPDATE vendas SET data_venda = @Data, idclientes = @idclientes, idprodutos = @idprodutos, quantidade = @Quantidade WHERE id = @id";
         using var cmd = new MySqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("@Data", venda.data_venda);
-        cmd.Parameters.AddWithValue("@ClienteId", venda.idclientes);
-        cmd.Parameters.AddWithValue("@ProdutoId", venda.idprodutos);
+        cmd.Parameters.AddWithValue("@idclientes", venda.idclientes);
+        cmd.Parameters.AddWithValue("@idprodutos", venda.idprodutos);
         cmd.Parameters.AddWithValue("@Quantidade", venda.quantidade);
-        cmd.Parameters.AddWithValue("@Id", venda.id);
-
+        cmd.Parameters.AddWithValue("@id", venda.id);
         cmd.ExecuteNonQuery();
     }
 

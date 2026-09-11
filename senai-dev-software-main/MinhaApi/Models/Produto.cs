@@ -13,5 +13,5 @@ public int Estoque { get; set; }
 
 public bool Ativo { get; set; } = true;
 
-
+public int AtualizarProduto {get; set;}
 }

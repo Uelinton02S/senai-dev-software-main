@@ -8,7 +8,10 @@ public class ClienteRepository : IClienteRepository {
    public ClienteRepository(IConfiguration config)
    =>  _connectionString = config.GetConnectionString("DefaultConnection")!;
 
-   
+   public static List<Cliente> _db = new(){
+    new Cliente { Id=1, Nome="João", Email="joao@email.com", Cpf=123456789, Ativo=true },
+    new Cliente { Id=2, Nome="Maria", Email="maria@email.com", Cpf=987654321, Ativo=true }
+   };
 
    public IEnumerable<Cliente> GetAll(){
     var lista = new List<Cliente>();
@@ -74,4 +77,5 @@ public class ClienteRepository : IClienteRepository {
       cmd.Parameters.AddWithValue("@Id", id);
       cmd.ExecuteNonQuery();
    }
+   
    }
