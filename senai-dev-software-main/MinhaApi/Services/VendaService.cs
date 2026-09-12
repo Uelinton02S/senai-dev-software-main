@@ -5,8 +5,6 @@ using MinhaApi.Services;
 
 namespace MinhaApi.Repositories;
 
-
-
 public class VendaService : IVendaService
 {
     private readonly IVendaRepository _repo;
@@ -17,16 +15,20 @@ public class VendaService : IVendaService
         _repo = repo;
     }
     
-    public IEnumerable<Venda> GetAll()
+    public void GetclienteById(int id)
     {
-        return _repo.GetAll();
+        if (id == 0){
+            throw new ArgumentException("Id inválido");
+        }
     }
 
-    public void Add(Venda venda)
+    public void GetProdutoById(int id)
     {
-        _repo.Add(venda);
+        if (id == 0){
+            throw new ArgumentException("Id inválido");
+        }
     }
-
+    
     public Venda Update(Venda venda)
     {
         _repo.Update(venda);

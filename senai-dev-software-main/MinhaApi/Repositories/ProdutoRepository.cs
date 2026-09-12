@@ -48,7 +48,6 @@ public ProdutoRepository(IConfiguration config)
     cmd.Parameters.AddWithValue("@Estoque", p.Estoque);
     cmd.Parameters.AddWithValue("@Ativo", p.Ativo);
 
-    // Executa a inserção e recupera o ID gerado pelo MySQL
     var idGerado = cmd.ExecuteScalar();
     p.Id = Convert.ToInt32(idGerado);
 }
@@ -68,8 +67,6 @@ public ProdutoRepository(IConfiguration config)
         cmd.Parameters.AddWithValue("@Ativo",p.Ativo);                          
     }
     
-
-    
         public void Delete(int id) {
             using var conn = new MySqlConnection(_connectionString);
             conn.Open();
@@ -78,6 +75,5 @@ public ProdutoRepository(IConfiguration config)
             cmd.Parameters.AddWithValue("@Id", id);
             cmd.ExecuteNonQuery();
         }
-        
         
 }
