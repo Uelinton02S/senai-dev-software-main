@@ -9,7 +9,7 @@ public class Venda {
     public int idclientes { get; set;}
     public int idprodutos {get; set;}
     public int quantidade { get; set; }
-
+    public decimal ValorTotal {get ; set; }
 
  
 }
