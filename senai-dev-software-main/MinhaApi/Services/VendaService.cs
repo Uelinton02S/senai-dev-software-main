@@ -1,40 +1,62 @@
-
 using MinhaApi.Models;
-using MinhaApi.Repositories;
-using MinhaApi.Services;
+using MinhaApi.Repository;
 
-namespace MinhaApi.Repositories;
+namespace MinhaApi.Services;
+
+public interface IVendaService
+{
+    Venda RealizarVenda(Venda venda);
+}
 
 public class VendaService : IVendaService
 {
-    private readonly IVendaRepository _repo;
+    private readonly IClienteRepository _clienteRepository;
+    private readonly IProdutoRepository _produtoRepository;
+    private readonly IVendaRepository _vendaRepository;
 
-
-    public VendaService(IVendaRepository repo)
+    public VendaService(
+        IClienteRepository clienteRepository,
+        IProdutoRepository produtoRepository,
+        IVendaRepository vendaRepository)
     {
-        _repo = repo;
+        _clienteRepository = clienteRepository;
+        _produtoRepository = produtoRepository;
+        _vendaRepository = vendaRepository;
     }
-    
-    public void GetclienteById(int id)
+
+    public Venda RealizarVenda(Venda venda)
     {
-        if (id == 0){
-            throw new ArgumentException("Id inválido");
+        
+        var cliente = _clienteRepository.GetById(venda.ClienteId);
+
+        if (cliente == null || !cliente.Ativo)
+        {
+            throw new Exception("Cliente não encontrado ou está inativo.");
         }
-    }
 
-    public void GetProdutoById(int id)
-    {
-        if (id == 0){
-            throw new ArgumentException("Id inválido");
+        
+        var produto = _produtoRepository.GetById(venda.ProdutoId);
+
+        if (produto == null || !produto.Ativo)
+        {
+            throw new Exception("Produto não encontrado ou está inativo.");
         }
-    }
-    
-    public Venda Update(Venda venda)
-    {
-        _repo.Update(venda);
-        return venda;
-    }
 
-    
+        
+        if (produto.Estoque < venda.Quantidade)
+        {
+            throw new Exception("Estoque insuficiente.");
+        }
+
+        venda.ValorTotal = produto.Preco * venda.Quantidade;
+        venda.DataVenda = DateTime.Now;
+
+        
+        produto.Estoque -= venda.Quantidade;
+
+        _produtoRepository.Update(produto.Id, produto);
+
+        
+        return _vendaRepository.Add(venda);
+    }
 }
-
