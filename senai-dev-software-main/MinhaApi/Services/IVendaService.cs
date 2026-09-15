@@ -1,11 +1,12 @@
 using MinhaApi.Models;
-using MinhaApi.Repositories;
+
 namespace MinhaApi.Services;
 
 
 public interface IVendaService
 {
-    IEnumerable<Venda> GetAll();
-    void Add(Venda venda);
-    Venda Update(Venda venda);
+    Venda Add(int id,Venda venda);
+    Venda? Update(int idclientes,int idprodutos,Venda venda);
+    Venda?GetById(int id,Venda venda);
+    Venda Create (int id, Venda venda);
 }
