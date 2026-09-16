@@ -58,5 +58,6 @@ public class VendaController : ControllerBase
 
         return Ok(vendaAtualizada);
     }
+    
 }
 
