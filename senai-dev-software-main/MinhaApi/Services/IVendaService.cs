@@ -4,9 +4,8 @@ namespace MinhaApi.Services;
 
 public interface IVendaService
 {
-    Venda Create(Venda venda);
-
-    Venda? Update(int id, Venda venda);
-
+    IEnumerable<Venda> GetAll();
     Venda? GetById(int id);
+    Venda Create(Venda venda);
+    Venda? Update(int id, Venda venda);
 }

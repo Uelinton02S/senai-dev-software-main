@@ -1,3 +1,4 @@
+
 using MinhaApi.Models;
 using MinhaApi.Repositories;
 
@@ -19,57 +20,43 @@ public class VendaService : IVendaService
         _VendaRepository = vendaRepository;
     }
 
+    public IEnumerable<Venda> GetAll()
+    {
+        return _VendaRepository.GetAll();
+    }
+
     public Venda Create(Venda venda)
     {
-        // Verifica se o cliente existe e está ativo
         var cliente = _ClienteRepository.GetById(venda.idclientes);
 
         if (cliente == null || !cliente.Ativo)
         {
-            throw new Exception(
-                "Cliente não encontrado ou está inativo."
-            );
+            throw new Exception("Cliente não encontrado ou está inativo.");
         }
 
-        // Verifica se o produto existe e está ativo
         var produto = _ProdutoRepository.GetById(venda.idprodutos);
 
         if (produto == null || !produto.Ativo)
         {
-            throw new Exception(
-                "Produto não encontrado ou está inativo."
-            );
+            throw new Exception("Produto não encontrado ou está inativo.");
         }
 
-        // Verifica se a quantidade é válida
         if (venda.quantidade <= 0)
         {
-            throw new Exception(
-                "A quantidade deve ser maior que zero."
-            );
+            throw new Exception("A quantidade deve ser maior que zero.");
         }
 
-        // Verifica o estoque
         if (produto.Estoque < venda.quantidade)
         {
-            throw new Exception(
-                "Estoque insuficiente."
-            );
+            throw new Exception("Estoque insuficiente.");
         }
 
-     
         venda.ValorTotal = produto.Preco * venda.quantidade;
-
-    
         venda.data_venda = DateTime.Now;
 
-       
         produto.Estoque -= venda.quantidade;
 
-       
         _ProdutoRepository.Update(produto);
-
-        
         _VendaRepository.Add(venda);
 
         return venda;
@@ -82,7 +69,6 @@ public class VendaService : IVendaService
 
     public Venda? Update(int id, Venda venda)
     {
-        
         var vendaExistente = _VendaRepository.GetById(id);
 
         if (vendaExistente == null)
@@ -90,45 +76,32 @@ public class VendaService : IVendaService
             return null;
         }
 
-    
         var cliente = _ClienteRepository.GetById(venda.idclientes);
 
         if (cliente == null || !cliente.Ativo)
         {
-            throw new Exception(
-                "Cliente não encontrado ou está inativo."
-            );
+            throw new Exception("Cliente não encontrado ou está inativo.");
         }
 
-     
         var produto = _ProdutoRepository.GetById(venda.idprodutos);
 
         if (produto == null || !produto.Ativo)
         {
-            throw new Exception(
-                "Produto não encontrado ou está inativo."
-            );
+            throw new Exception("Produto não encontrado ou está inativo.");
         }
 
-  
         if (venda.quantidade <= 0)
         {
-            throw new Exception(
-                "A quantidade deve ser maior que zero."
-            );
+            throw new Exception("A quantidade deve ser maior que zero.");
         }
 
         venda.id = id;
-
-    
         venda.data_venda = DateTime.Now;
-
-    
         venda.ValorTotal = produto.Preco * venda.quantidade;
 
-    
         _VendaRepository.Update(venda);
 
         return venda;
     }
 }
+
