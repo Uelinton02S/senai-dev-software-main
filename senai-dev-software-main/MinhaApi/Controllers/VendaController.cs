@@ -71,7 +71,7 @@ public class VendaController : ControllerBase
             vendaResponse
         );
     }
-
+/*
     [HttpPut("{id}")]
     public IActionResult Update(int id, Venda venda)
     {
@@ -93,5 +93,6 @@ public class VendaController : ControllerBase
 
         return Ok(vendaResponse);
     }
+    */
 }
 

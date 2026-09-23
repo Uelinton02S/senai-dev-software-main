@@ -1,4 +1,4 @@
-using MinhaApi.Models;
+using MinhaApi.DTO;
 
 public class VendaRequest
 {
