@@ -1,6 +1,6 @@
 namespace MinhaApi.Models;
 
-public class Fonrnecedores
+public class Fornecedores
 {
     
     public int Id {get; set; }
@@ -8,5 +8,7 @@ public class Fonrnecedores
     public string Nome {get; set; }
 
     public string Cnpj {get; set; }
-
+    
+    public DateTime data_venda {get; set;}
+    
 }
