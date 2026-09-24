@@ -2,104 +2,72 @@ using MinhaApi.Models;
 using MinhaApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
-
-namespace MinhaApi.Controllers
+[ApiController]
+[Route("api/[controller]")]
+public class FornecedoresController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class FornecedoresController : ControllerBase
-    {
-        private static readonly List<Dictionary<string, object>> Fornecedores = new()
-        {
-            new Dictionary<string, object>
-            {
-                ["id"] = 1,
-                ["nome"] = "Fornecedor A",
-                ["telefone"] = "(11) 99999-1111",
-                ["email"] = "contato@fornecedora.com.br",
-                ["ativo"] = true
-            },
-            new Dictionary<string, object>
-            {
-                ["id"] = 2,
-                ["nome"] = "Fornecedor B",
-                ["telefone"] = "(21) 98888-2222",
-                ["email"] = "vendas@fornecedorb.com.br",
-                ["ativo"] = true
-            }
-        };
+private readonly IFornecedoresService _service;
 
-        [HttpGet]
-        public ActionResult<IEnumerable<Dictionary<string, object>>> Get()
-        {
-            return Ok(Fornecedores);
-        }
 
-        [HttpGet("{id}")] 
-        public ActionResult<Dictionary<string, object>> GetById(int id)
-        {
-            var fornecedor = Fornecedores.FirstOrDefault(f => (int)f["id"] == id);
+public FornecedoresController(IFornecedoresService service)
+{
+    _service = service;
+}
 
-            if (fornecedor == null)
-            {
-                return NotFound();
-            }
+// GET: api/forncedor
+[HttpGet]
+public IActionResult GetAll()
+{
+    return Ok(_service.GetAll());
+}
 
-            return Ok(fornecedor);
-        }
+// GET: api/forncedor/1
+[HttpGet("{id}")]
+public IActionResult GetById(int id)
+{
+    var fornecedor = _service.GetById(id);
 
-        [HttpPost]
-        public ActionResult<Dictionary<string, object>> Post([FromBody] Dictionary<string, object> fornecedor)
-        {
-            if (fornecedor == null)
-            {
-                return BadRequest();
-            }
+    if (fornecedor == null)
+        return NotFound();
 
-            var nextId = Fornecedores.Count == 0 ? 1 : Fornecedores.Max(f => (int)f["id"]) + 1;
-            fornecedor["id"] = nextId;
+    return Ok(fornecedor);
+}
 
-            Fornecedores.Add(fornecedor);
+// POST: api/forncedor
+[HttpPost]
+public IActionResult Create([FromBody] Fornecedores fornecedores)
+{
+    if (!ModelState.IsValid)
+        return BadRequest(ModelState);
 
-            return CreatedAtAction(nameof(GetById), new { id = nextId }, fornecedor);
-        }
+    var novoProduto = _service.Create(fornecedores);
 
-        [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Dictionary<string, object> fornecedorAtualizado)
-        {
-            if (fornecedorAtualizado == null)
-            {
-                return BadRequest();
-            }
+    return CreatedAtAction(
+        nameof(GetById),
+        new { id = novoProduto.Id },
+        novoProduto
+    );
+}
 
-            var fornecedor = Fornecedores.FirstOrDefault(f => (int)f["id"] == id);
+// PUT: api/forncedor/1
+[HttpPut("{id}")]
+public IActionResult Update(int id, [FromBody] Fornecedores fornecedores)
+{
+    var fornecedorAtualizado = _service.Update(id, fornecedores);
 
-            if (fornecedor == null)
-            {
-                return NotFound();
-            }
+    if (fornecedorAtualizado == null)
+        return NotFound();
 
-            fornecedor["nome"] = fornecedorAtualizado.ContainsKey("nome") ? fornecedorAtualizado["nome"] : fornecedor["nome"];
-            fornecedor["telefone"] = fornecedorAtualizado.ContainsKey("telefone") ? fornecedorAtualizado["telefone"] : fornecedor["telefone"];
-            fornecedor["email"] = fornecedorAtualizado.ContainsKey("email") ? fornecedorAtualizado["email"] : fornecedor["email"];
-            fornecedor["ativo"] = fornecedorAtualizado.ContainsKey("ativo") ? fornecedorAtualizado["ativo"] : fornecedor["ativo"];
+    return Ok(fornecedorAtualizado);
+}
 
-            return NoContent();
-        }
+// DELETE: api/forncedor/1
+[HttpDelete("{id}")]
+public IActionResult Delete(int id)
+{
+    if (!_service.Delete(id))
+        return NotFound();
 
-        [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
-        {
-            var fornecedor = Fornecedores.FirstOrDefault(f => (int)f["id"] == id);
-
-            if (fornecedor == null)
-            {
-                return NotFound();
-            }
-
-            Fornecedores.Remove(fornecedor);
-
-            return NoContent();
-        }
-    }
+    return NoContent();
+}
 }

@@ -14,7 +14,9 @@ public class FornecedoresRepository : IFornecedoresRepository
           var lista = new List<Fornecedores>();
           using var conn = new MySqlConnection(_connectionstring);
           conn.Open();
-          string sql = "SELECT id, nome, cnpj, ativo FROM fornecedores";
+         string sql = @"SELECT id, nome, email, cnpj, data_venda, cep, numero,
+                      complemento, celular, telefone, ativo
+               FROM fornecedores";
           using var cmd = new MySqlCommand(sql,conn);
           using var reader = cmd.ExecuteReader();
           while (reader.Read())
@@ -25,11 +27,11 @@ public class FornecedoresRepository : IFornecedoresRepository
                     Nome = reader.GetString("nome"),
                     Cnpj = reader.GetString("cnpj"),
                     Data_venda = reader.GetDateTime("data_venda"),
-                    Cep = reader.GetInt16("cep"),
-                    numero = reader.GetInt16("numero"),
+                    Cep = reader.GetInt32("cep"),
+                    numero = reader.GetInt32("numero"),
                     Complemento = reader.GetString("complemento"),
                     Celular = reader.GetString("celular"),
-                    telefone = reader.GetString("telefone,"),
+                    telefone = reader.GetString("telefone"),
                     Ativo = reader.GetBoolean("ativo")
                });
           }
@@ -54,8 +56,8 @@ public class FornecedoresRepository : IFornecedoresRepository
                     email = reader.GetString("email"),
                     Cnpj = reader.GetString("cnpj"),
                     Data_venda = reader.GetDateTime("data_venda"),
-                    Cep = reader.GetInt16("cep"),
-                    numero = reader.GetInt16("numero"),
+                    Cep = reader.GetInt32("cep"),
+                    numero = reader.GetInt32("numero"),
                     Complemento = reader.GetString("complemento"),
                     Celular = reader.GetString("celular"),
                     telefone = reader.GetString("telefone"),
@@ -69,7 +71,7 @@ public class FornecedoresRepository : IFornecedoresRepository
      {
           using var conn = new MySqlConnection(_connectionstring);
           conn.Open();
-          string sql = @"INSERT INTO fornecedores (nome,email,cnpj,data_venda,cep,numero,complemento,celular,telefone,ativo)
+          string sql = @"INSERT INTO fornecedores (nome,email,cnpj,Data_venda,cep,numero,complemento,celular,telefone,ativo)
                          VALUES (@Nome,@Email,@Cnpj,@Data_venda,@Cep,@Numero,@Complemento,@Celular,@Telefone,@Ativo);
                            SELECT LAST_INSERT_ID();";
           using var cmd = new MySqlCommand(sql, conn);

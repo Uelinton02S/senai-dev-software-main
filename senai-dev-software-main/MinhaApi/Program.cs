@@ -1,4 +1,5 @@
 
+using MinhaApi.Models;
 using MinhaApi.Repositories;
 using MinhaApi.Services;
 
@@ -19,9 +20,12 @@ builder.Services.AddScoped<IVendaRepository, VendaRepository>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-builder.Services.AddScoped<IClienteService, FornecedoresService>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IVendaRepository, VendaRepository>();
 builder.Services.AddScoped<IVendaService, VendaService>();
+builder.Services.AddScoped<IFornecedoresRepository, FornecedoresRepository>();
+builder.Services.AddScoped<IFornecedoresService, FornecedoresService>();
+
 
 var app = builder.Build();
 
