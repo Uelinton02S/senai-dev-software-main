@@ -78,7 +78,7 @@ public class DepartamentoRepository : IDepartamentoRepository
         return null;
     }
 
-    public void Add(Venda venda)
+    public void Add(Departamento departamento)
     {
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
@@ -100,7 +100,7 @@ public class DepartamentoRepository : IDepartamentoRepository
 
         cmd.ExecuteNonQuery();
 
-        venda.id = (int)cmd.LastInsertedId;
+        departamento.Id = (int)cmd.LastInsertedId;
     }
 
     public void Update(Departamento departamento)
@@ -123,7 +123,7 @@ public class DepartamentoRepository : IDepartamentoRepository
 
         
         cmd.Parameters.AddWithValue("@Nome", departamento.Nome);
-        cmd.Parameters.AddWithValue("@Email", Departamento.email);
+        cmd.Parameters.AddWithValue("@Email", departamento.email);
         cmd.Parameters.AddWithValue("@telefone", departamento.telefone);
         cmd.Parameters.AddWithValue("@idfornecedores", departamento.idfornecedores);
         cmd.Parameters.AddWithValue("@iddepartamento", departamento.iddepartamento);
@@ -132,6 +132,15 @@ public class DepartamentoRepository : IDepartamentoRepository
 
         cmd.ExecuteNonQuery();
     }
+        public void Delete(int id)
+     {
+          using var conn = new MySqlConnection(_connectionstring);
+          conn.Open();
+          string sql = @"DELETE FROM departamento WHERE id = @Id";
+          using var cmd = new MySqlCommand(sql, conn);
+          cmd.Parameters.AddWithValue(@"Id", id);
+          cmd.ExecuteNonQuery();
+     }
 }
 
 

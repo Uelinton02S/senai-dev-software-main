@@ -9,4 +9,5 @@ public interface IDepartamentoRepository
     Departamento? GetById(int id);
     void Add(Departamento departamento);
     void Update(Departamento departamento);
+    void Delete(int id);
 }
