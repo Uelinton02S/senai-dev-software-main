@@ -14,14 +14,14 @@ public DepartamentoController(IDepartamentoService service)
     _service = service;
 }
 
-// GET: api/forncedor
+// GET: api/Departamento
 [HttpGet]
 public IActionResult GetAll()
 {
     return Ok(_service.GetAll());
 }
 
-// GET: api/forncedor/1
+// GET: api/Departamento/1
 [HttpGet("{id}")]
 public IActionResult GetById(int id)
 {
@@ -33,7 +33,7 @@ public IActionResult GetById(int id)
     return Ok(departamento);
 }
 
-// POST: api/forncedor
+// POST: api/Departamento
 [HttpPost]
 public IActionResult Add([FromBody] Departamento departamento)
 {
@@ -49,7 +49,7 @@ public IActionResult Add([FromBody] Departamento departamento)
     );
 }
 
-// PUT: api/forncedor/1
+// PUT: api/Departamento/1
 [HttpPut("{id}")]
 public IActionResult Update(int id, [FromBody] Departamento departamento)
 {
@@ -61,7 +61,7 @@ public IActionResult Update(int id, [FromBody] Departamento departamento)
     return Ok(departamentoAtualizado);
 }
 
-// DELETE: api/forncedor/1
+// DELETE: api/Departamento/1
 [HttpDelete("{id}")]
 public IActionResult Delete(int id)
 {

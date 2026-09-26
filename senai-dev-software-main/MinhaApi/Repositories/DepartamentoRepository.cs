@@ -15,7 +15,7 @@ public class DepartamentoRepository : IDepartamentoRepository
           var lista = new List<Departamento>();
           using var conn = new MySqlConnection(_connectionstring);
           conn.Open();
-         string sql = @"SELECT id, ,idfornecedores,iddepartaemento, nome,email,descricao,telefone       
+         string sql = @"SELECT id,idfornecedores,iddepartamento,nome,email,descricao,telefone       
                FROM departamento";
           using var cmd = new MySqlCommand(sql,conn);
           using var reader = cmd.ExecuteReader();
@@ -26,6 +26,7 @@ public class DepartamentoRepository : IDepartamentoRepository
                     Id = reader.GetInt32("id"),
                     Nome = reader.GetString("nome"),
                     email = reader.GetString("email"),
+                    descricao = reader.GetString("descricao"),
                     idfornecedores = reader.GetInt32("idfornecedores"),
                     iddepartamento = reader.GetInt32("iddepartamento"),
                     telefone = reader.GetString("telefone"),
@@ -38,61 +39,51 @@ public class DepartamentoRepository : IDepartamentoRepository
      }
       public Departamento? GetById(int id)
     {
-        using var conn = new MySqlConnection(_connectionString);
+        using var conn = new MySqlConnection(_connectionstring);
         conn.Open();
 
-        string sql = @"
-            SELECT 
-                id,
-                nome,
-                email,
-                descricao,
-                telefone,
-                idfornecedores,
-                iddepartamento,
-            
+        string sql = """
+            SELECT id,idfornecedores,iddepartamento,nome,email,descricao,telefone,ativo
             FROM departamento
-            WHERE id = @id";
+            WHERE id = @Id
+            """;
 
         using var cmd = new MySqlCommand(sql, conn);
-
-        cmd.Parameters.AddWithValue("@id", id);
+        cmd.Parameters.AddWithValue("@Id", id);
 
         using var reader = cmd.ExecuteReader();
 
-        if (reader.Read())
+        if (!reader.Read())
+            return null;
+
+        return new Departamento
         {
-            return new Departamento
-            {
                     Id = reader.GetInt32("id"),
                     Nome = reader.GetString("nome"),
                     email = reader.GetString("email"),
+                    descricao = reader.GetString("descricao"),
                     idfornecedores = reader.GetInt32("idfornecedores"),
                     iddepartamento = reader.GetInt32("iddepartamento"),
                     telefone = reader.GetString("telefone"),
                     Ativo = reader.GetBoolean("ativo")
-            
-            };
-        }
-
-        return null;
+        };
     }
 
     public void Add(Departamento departamento)
     {
-        using var conn = new MySqlConnection(_connectionString);
+        using var conn = new MySqlConnection(_connectionstring);
         conn.Open();
 
         string sql = @"
             INSERT INTO departamento 
-                (nome, iddepartamento,@descricao idforncedores, email,telefone)
+                (nome, iddepartamento,idfornecedores,descricao,email,telefone)
             VALUES 
-                (@nome, @idfornecedores,@descricao @iddepartamento, @telefone)";
+                (@nome, @idfornecedores,@iddepartamento, @descricao, @email, @telefone)";
 
         using var cmd = new MySqlCommand(sql, conn);
 
-        cmd.Parameters.AddWithValue("@Nome", departamento.Nome);
-        cmd.Parameters.AddWithValue("@Email", departamento.email);
+        cmd.Parameters.AddWithValue("@nome", departamento.Nome);
+        cmd.Parameters.AddWithValue("@email", departamento.email);
         cmd.Parameters.AddWithValue("@telefone", departamento.telefone);
         cmd.Parameters.AddWithValue("@idfornecedores", departamento.idfornecedores);
         cmd.Parameters.AddWithValue("@iddepartamento", departamento.iddepartamento);
@@ -105,17 +96,19 @@ public class DepartamentoRepository : IDepartamentoRepository
 
     public void Update(Departamento departamento)
     {
-        using var conn = new MySqlConnection(_connectionString);
+        using var conn = new MySqlConnection(_connectionstring);
         conn.Open();
 
         string sql = @"
             UPDATE departamento
             SET 
                 nome = @nome,
-                iddepartamento = @iddepartamento
-                idprodutos = @idfornecedor,
-                descricao = @descricao
-                email = @email
+                iddepartamento = @iddepartamento,
+                idfornecedores = @idfornecedores,
+                descricao = @descricao,
+                email = @email,
+                telefone = @telfone,
+                ativo = @ativo
 
             WHERE id = @id";
 
