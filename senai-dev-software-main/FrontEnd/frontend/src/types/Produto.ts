@@ -3,9 +3,9 @@
 // Verifique: "nome" ou "Nome"? "preco" ou "Preco"?
 
 export interface Produto {
-  Id: number
-  Nome: string
-  Preco: number
+  id: number
+  nome: string
+  preco: number
 }
 
 // Tipo para criação — sem o id (gerado pela MinhaAPI)

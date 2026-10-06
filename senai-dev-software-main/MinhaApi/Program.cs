@@ -27,13 +27,26 @@ builder.Services.AddScoped<IFornecedoresRepository, FornecedoresRepository>();
 builder.Services.AddScoped<IFornecedoresService, FornecedoresService>();
 builder.Services.AddScoped<IDepartamentoRepository, DepartamentoRepository>();
 builder.Services.AddScoped<IDepartamentoService, DepartamentoService>();
+
 var app = builder.Build();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAll");
 
 app.MapControllers();
 
