@@ -6,7 +6,7 @@ import ProdutoList from './components/ProdutoList'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Sidebar from './components/SideBar'
 import ClientesPage from './pages/ClientesPage'
-
+import './App.css'
 
 function ProdutosPage() {
   const [produtos, setProdutos] = useState<Produto[]>([])
