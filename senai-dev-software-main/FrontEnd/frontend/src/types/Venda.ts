@@ -1,11 +1,11 @@
 // Os nomes devem coincidir com o Swagger
 export interface Venda {
   id: number
-  data_venda: number
+  data_venda: String
   quantidade: number
   ValorTotal: number
   
 }
 
-export type NovoCliente =
+export type NovoVenda =
   Omit<Venda, 'id' | 'ativo'>
