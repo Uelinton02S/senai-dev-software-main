@@ -1,4 +1,4 @@
-// Os nomes devem coincidir com o Swagger
+
 export interface Venda {
   id: number
   data_venda: String
