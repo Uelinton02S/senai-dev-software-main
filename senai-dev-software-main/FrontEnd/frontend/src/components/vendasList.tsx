@@ -5,7 +5,7 @@ interface Props {
   loading: boolean
 }
 
-function VendaList({ Venda, loading }: Props) {
+function VendasList({ Venda, loading }: Props) {
   if (loading) return <p>Carregando...</p>
   if (Venda.length === 0)
     return <p>Nenhuma venda realizada ainda.</p>
@@ -14,11 +14,11 @@ function VendaList({ Venda, loading }: Props) {
     <ul>
       {Venda.map(v => (
         <li key={v.id}>
-          <strong>{v.data_venda}</strong> — {v.quantidade}
-          {v.ValorTotal && <span> (ValorTotal: {v.ValorTotal})</span>}
+          <strong>{v.idproduto}</strong> — {v.idproduto}
+          {v.quantidade && <span> (quantidade: {v.quantidade})</span>}
         </li>
       ))}
     </ul>
   )
 }
-export default VendaList
+export default VendasList

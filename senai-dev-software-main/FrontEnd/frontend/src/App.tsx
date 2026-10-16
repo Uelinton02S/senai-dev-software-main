@@ -7,6 +7,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Sidebar from './components/SideBar'
 import ClientesPage from './pages/ClientesPage'
 import './App.css'
+import VendasPage from './pages/vendasPage'
+import DepartamentoPage from './pages/DepartamentoPage'
 
 function ProdutosPage() {
   const [produtos, setProdutos] = useState<Produto[]>([])
@@ -51,6 +53,9 @@ function App() {
             <Route path="/" element={<Navigate to="/produtos" replace />} />
             <Route path="/produtos" element={<ProdutosPage />} />
             <Route path="/clientes" element={<ClientesPage />} />
+             <Route path="/vendas" element={<VendasPage />} />
+             <Route path="/Departamento" element={<DepartamentoPage />} />
+             
           </Routes>
         </main>
       </div>

@@ -1,46 +1,109 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { vendaService } from '../services/vendaService'
+import { clienteService } from '../services/ClienteService'
+import { produtoService } from '../services/produtoService' 
+
+interface Cliente {
+  id: number
+  nome: string
+}
+interface Produto {
+  id: number
+  nome: string
+  preco: number
+}
 
 interface Props { onVendaCriado: () => void }
 
 export default function VendaForm({ onVendaCriado }: Props) {
-  const [data_venda, setData] = useState('')
+ 
+  const [clientes, setClientes] = useState<Cliente[]>([])
+  const [produtos, setProdutos] = useState<Produto[]>([])
+  const [idproduto, setIdproduto] = useState('')
+  const [idcliente, setIdcliente] = useState('')
   const [quantidade, setQuantidade] = useState('')
-  const [ValorTotal, setValorTotal] = useState('')
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
 
+
+  useEffect(() => {
+    async function carregarDados() {
+      try {
+        const [dadosClientes, dadosProdutos] = await Promise.all([
+          clienteService.listar(),
+          produtoService.listar()
+        ])
+        setClientes(dadosClientes)
+        setProdutos(dadosProdutos)
+      } catch {
+        setErro('Erro ao carregar lista de clientes e produtos.')
+      }
+    }
+
+    carregarDados()
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); setErro(null)
+    e.preventDefault()
+    setErro(null)
+
     try {
       setLoading(true)
-      await vendaService.criar({ data_venda, ValorTotal: Number(ValorTotal), quantidade:Number(quantidade) })
-      setData(''); setQuantidade(''); setValorTotal('')
+      await vendaService.criar({ idproduto: Number(idproduto), idcliente: Number(idcliente),
+         quantidade: Number(quantidade) 
+      })
       onVendaCriado()
-    } catch { setErro('Erro ao realizar venda. Tente novamente.') }
-    finally { setLoading(false) }
+    } catch { setErro('Erro ao realizar venda. Tente novamente.') 
+    } finally { setLoading(false) }
   }
 
-return (
-  <form onSubmit={handleSubmit}>
-    <h2>Realizar Venda</h2>
-    {erro && <p>{erro}</p>}
+  return (
+    <form onSubmit={handleSubmit}>
+      <h2>Realizar Venda</h2>
+      {erro && <p style={{ color: 'red' }}>{erro}</p>}
 
-    <label htmlFor="Data">data_venda</label>
-    <input id="data_venda" type = "string" value={data_venda}
-      onChange={e => setData(e.target.value)} required />
 
-    <label htmlFor="quantidade">quantidade</label>
-    <input id="quantidade" type="number" value={quantidade}
-      onChange={e => setQuantidade(e.target.value)} required />
+      <label htmlFor="idcliente">Cliente</label>
+      <select 
+        id="idcliente" 
+        value={idcliente} 
+        onChange={e => setIdcliente(e.target.value)} 
+        required
+      >
+        <option value="">-- Selecione um cliente --</option>
+        {clientes.map(cliente => (
+          <option key={cliente.id} value={cliente.id}>
+            {cliente.nome}
+          </option>
+        ))}
+      </select>
 
-    <label htmlFor="ValorTotal">ValorTotal</label>
-    <input id="ValorTotal" type = "number" value={ValorTotal}
-      onChange={e => setValorTotal(e.target.value)} />
+     
+      <label htmlFor="idproduto">Produto</label>
+      <select 
+        id="idproduto" 
+        value={idproduto} 
+        onChange={e => setIdproduto(e.target.value)} 
+        required
+      >
+        <option value="">--Selecione um produto--</option>
+        {produtos.map(produto => (
+          <option key={produto.id} value={produto.id}>
+            {produto.nome}
+          </option>
+        ))}
+      </select>
 
-    <button disabled={loading}>
-      {loading ? 'Salvando...' : 'Cadastrar'}
-    </button>
-  </form>
- )
+  
+      <label htmlFor="quantidade">Quantidade</label>
+      <input id="quantidade" type="number" min="1"value={quantidade}
+        onChange={e => setQuantidade(e.target.value)} 
+        required 
+      />
+
+      <button disabled={loading}>
+        {loading ? 'Salvando...' : 'Cadastrar'}
+      </button>
+    </form>
+  )
 }

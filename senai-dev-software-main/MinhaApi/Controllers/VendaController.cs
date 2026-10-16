@@ -1,98 +1,115 @@
-
 using MinhaApi.DTO;
 using MinhaApi.Models;
 using MinhaApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
-[ApiController]
-[Route("api/[controller]")]
-public class VendaController : ControllerBase
+namespace MinhaApi.Controllers
 {
-    private readonly IVendaService _vendaService;
-
-    public VendaController(IVendaService vendaService)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class VendaController : ControllerBase
     {
-        _vendaService = vendaService;
-    }
+        private readonly IVendaService _vendaService;
 
-    [HttpGet]
-    public IActionResult GetAll()
-    {
-        var vendas = _vendaService.GetAll();
-        var vendaResponses = vendas.Select(v => new VendaResponse
+        public VendaController(IVendaService vendaService)
         {
-            idproduto = v.idprodutos,
-            idcliente = v.idclientes,
-            quantidade = v.quantidade,
-            data_venda = v.data_venda
-        });
-        return Ok(vendaResponses);
-    }
-
-    [HttpGet("{id}")]
-    public IActionResult GetById(int id)
-    {
-        var venda = _vendaService.GetById(id);
-        var vendaResponse = venda != null ? new VendaResponse
-        {
-            
-            idproduto = venda.idprodutos,
-            idcliente = venda.idclientes,
-            quantidade = venda.quantidade,
-          
-            data_venda = venda.data_venda
-        } : null;
-
-        if (venda == null)
-        {
-            return NotFound();
+            _vendaService = vendaService;
         }
 
-        return Ok(vendaResponse);
-    }
-
-    [HttpPost]
-    public IActionResult Add(Venda venda)
-    {
-        var novaVenda = _vendaService.Create(venda);
-        var vendaResponse = new VendaResponse
+        [HttpGet]
+        public IActionResult GetAll()
         {
-          
-            idproduto = novaVenda.idprodutos,
-            idcliente = novaVenda.idclientes,
-            quantidade = novaVenda.quantidade,
-        
-            data_venda = novaVenda.data_venda
-        };
-
-        return CreatedAtAction(
-            nameof(GetById),
-            new { id = novaVenda.id },
-            vendaResponse
-        );
-    }
-/*
-    [HttpPut("{id}")]
-    public IActionResult Update(int id, Venda venda)
-    {
-        var vendaAtualizada = _vendaService.Update(id, venda);
-        var vendaResponse = vendaAtualizada != null ? new VendaResponse
-        {
+            var vendas = _vendaService.GetAll();
             
-            idproduto = vendaAtualizada.idprodutos,
-            idcliente = vendaAtualizada.idclientes,
-            quantidade = vendaAtualizada.quantidade,
-    
-            data_venda = vendaAtualizada.data_venda
-        } : null;
+            var vendaResponses = vendas.Select(v => new VendaResponse
+            {
+                idproduto = v.idprodutos,
+                idcliente = v.idclientes,
+                quantidade = v.quantidade,
+               
+            });
 
-        if (vendaAtualizada == null)
-        {
-            return NotFound();
+            return Ok(vendaResponses);
         }
 
-        return Ok(vendaResponse);
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var venda = _vendaService.GetById(id);
+
+            if (venda == null)
+            {
+                return NotFound();
+            }
+
+            var vendaResponse = new VendaResponse
+            {
+                idproduto = venda.idprodutos,
+                idcliente = venda.idclientes,
+                quantidade = venda.quantidade,
+             
+            };
+
+            return Ok(vendaResponse);
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] VendaRequest request) 
+        {
+            
+            var novaVenda = new Venda
+            {
+                idprodutos = request.idproduto,
+                idclientes = request.idcliente,
+                quantidade = request.quantidade,
+                
+            };
+
+            var vendaCriada = _vendaService.Create(novaVenda);
+
+            var vendaResponse = new VendaResponse
+            {
+                idproduto = vendaCriada.idprodutos,
+                idcliente = vendaCriada.idclientes,
+                quantidade = vendaCriada.quantidade,
+         
+            };
+
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = vendaCriada.id },
+                vendaResponse
+            );
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] VendaRequest request)
+        {
+            
+            var dadosAtualizados = new Venda
+            {
+                idprodutos = request.idproduto,
+                idclientes = request.idcliente,
+                quantidade = request.quantidade,
+           
+            };
+
+            var vendaAtualizada = _vendaService.Update(id, dadosAtualizados);
+
+            if (vendaAtualizada == null)
+            {
+                return NotFound();
+            }
+
+            var vendaResponse = new VendaResponse
+            {
+                idproduto = vendaAtualizada.idprodutos,
+                idcliente = vendaAtualizada.idclientes,
+                quantidade = vendaAtualizada.quantidade,
+                data_venda = vendaAtualizada.data_venda
+            };
+
+            return Ok(vendaResponse);
+        }
     }
-    */
 }
-

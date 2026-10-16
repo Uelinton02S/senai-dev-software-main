@@ -4,7 +4,7 @@ import { vendaService } from '../services/vendaService'
 import VendaForm from '../components/VendaForm'
 import VendaList from '../components/vendasList'
 
-function VendaPage() {
+function VendasPage() {
   const [Venda, setVenda] = useState<Venda[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -21,4 +21,4 @@ function VendaPage() {
     <VendaList Venda={Venda} loading={loading} />
   </div>)
 }
-export default VendaPage
+export default VendasPage

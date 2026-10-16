@@ -1,9 +1,10 @@
 
 export interface Venda {
   id: number
-  data_venda: String
+  idproduto: number
+  idcliente: number
   quantidade: number
-  ValorTotal: number
+ 
   
 }
 
