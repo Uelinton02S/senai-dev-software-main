@@ -19,7 +19,7 @@ body {
 }
 
 .sidebar {
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   width: 210px;
@@ -120,7 +120,7 @@ li strong {
 
 
 p {
-  margin-bottom: px;
+  margin-bottom: 15px;
 }
 
 p[style*="red"] {

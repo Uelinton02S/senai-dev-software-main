@@ -13,15 +13,15 @@ const getLinkStyle = ({ isActive }: { isActive: boolean }) => ({
 
 export default function Sidebar() {
   return (
-    <nav
-      style={{
-        width: '210px',
-        background: '#2d668b',
-        height: '100vh',
-        padding: '0',
-        flexShrink: 0
-      }}
-    >
+   <nav
+  style={{
+    width: '210px',
+    background: '#2d668b',
+    minHeight: '100vh',
+    padding: '0',
+    flexShrink: 0
+  }}
+>
       <div
         className="sidebar-title"
         style={{
