@@ -1,6 +1,9 @@
 using MinhaApi.Models;
 using MinhaApi.Repositories;
 using MinhaApi.Services;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +26,23 @@ builder.Services.AddCors(options =>
     });
 });
 
+var jwtKey = builder.Configuration["Jwt:Key"]!;
+
+builder.Services
+  .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+  .AddJwtBearer(opt => {
+    opt.TokenValidationParameters = new TokenValidationParameters {
+      ValidateIssuerSigningKey = true,
+      IssuerSigningKey = new SymmetricSecurityKey(
+          Encoding.UTF8.GetBytes(jwtKey)),
+      ValidateIssuer   = true,
+      ValidIssuer      = builder.Configuration["Jwt:Issuer"],
+      ValidateAudience = true,
+      ValidAudience    = builder.Configuration["Jwt:Audience"],
+      ValidateLifetime = true
+    };
+  });
+
 
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
@@ -43,6 +63,10 @@ builder.Services.AddScoped<IFornecedoresService, FornecedoresService>();
 builder.Services.AddScoped<IDepartamentoRepository, DepartamentoRepository>();
 builder.Services.AddScoped<IDepartamentoService, DepartamentoService>();
 
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -52,7 +76,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("ReactPolicy");
-
+app.UseAuthentication();  // 1º quem é você?
+app.UseAuthorization();   //// 2º você pode entrar?
 app.MapControllers();
+
+
 
 app.Run();

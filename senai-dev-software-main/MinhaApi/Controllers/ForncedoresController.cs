@@ -1,7 +1,10 @@
 using MinhaApi.Models;
 using MinhaApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
+
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class FornecedoresController : ControllerBase
