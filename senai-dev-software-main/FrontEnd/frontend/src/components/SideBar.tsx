@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import '../assets/css/SideBar.css'
 
 const getLinkStyle = ({ isActive }: { isActive: boolean }) => ({
   display: 'block',

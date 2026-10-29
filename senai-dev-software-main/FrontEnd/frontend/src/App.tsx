@@ -5,6 +5,9 @@ import ProtectedRoute from './components/ProtectedRoute'
 import LoginPage from './pages/LoginPage'
 import ProdutosPage from './pages/ProdutosPage'
 import ClientesPage from './pages/ClientesPage'
+import VendasPage from './pages/vendasPage'
+import DepartamentoPage from './pages/DepartamentoPage'
+
 
 function Layout() {
   const { isAuthenticated } = useAuth()
@@ -20,6 +23,12 @@ function Layout() {
           } />
           <Route path="/clientes" element={
             <ProtectedRoute><ClientesPage /></ProtectedRoute>
+          } />
+          <Route path="/vendas" element={
+            <ProtectedRoute><VendasPage /></ProtectedRoute>
+          } />
+          <Route path="/departamento" element={
+            <ProtectedRoute><DepartamentoPage /></ProtectedRoute>
           } />
         </Routes>
       </main>

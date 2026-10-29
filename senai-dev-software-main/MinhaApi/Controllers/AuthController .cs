@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -10,21 +9,17 @@ public class AuthController : ControllerBase
     public AuthController(IAuthService authService)
         => _authService = authService;
 
-    [AllowAnonymous]
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginRequest request)
     {
         try
         {
             var response = _authService.Login(request);
-            return Ok(response);
+            return Ok(response);             // 200
         }
-        catch (UnauthorizedAccessException)
+        catch (UnauthorizedAccessException ex)
         {
-            return Unauthorized(new
-            {
-                message = "E-mail ou senha inválidos."
-            });
+            return Unauthorized(new { message = ex.Message }); // 401
         }
     }
 }

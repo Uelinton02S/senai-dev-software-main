@@ -1,0 +1,169 @@
+
+.produtos-container {
+  padding: 10px;
+  color: #172b4d;
+  font-family: Arial, Helvetica, sans-serif;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.produtos-header {
+  margin-bottom: 28px;
+}
+
+.produtos-header h1 {
+  font-size: 30px;
+  margin: 0 0 8px;
+  color: #172b4d;
+}
+
+.produtos-header p {
+  color: #718096;
+  margin: 0;
+}
+
+.produto-card {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(30, 64, 120, 0.08);
+  border: 1px solid #e5edf6;
+  margin-bottom: 28px;
+}
+
+.produto-card h2 {
+  margin: 0 0 22px;
+  font-size: 21px;
+  color: #23466b;
+}
+
+.produto-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.produto-form label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.produto-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 15px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.produto-form input:focus {
+  border-color: #2d668b;
+  box-shadow: 0 0 0 3px rgba(45, 102, 139, 0.12);
+}
+
+.produto-button {
+  margin-top: 15px;
+  padding: 12px 18px;
+  background: #2d668b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.produto-button:hover {
+  background: #214e6c;
+}
+
+.produto-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.produtos-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.produto-item {
+  padding: 18px;
+  background: white;
+  border: 1px solid #e5edf6;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(30, 64, 120, 0.05);
+}
+
+.produto-item h3 {
+  margin: 0 0 12px;
+  font-size: 17px;
+  color: #23466b;
+}
+
+.produto-preco {
+  font-size: 20px;
+  font-weight: bold;
+  color: #23804b;
+  margin: 0 0 10px;
+}
+
+.produto-estoque {
+  color: #718096;
+  font-size: 14px;
+  margin: 0;
+}
+
+.produtos-mensagem {
+  color: #718096;
+  padding: 20px 0;
+}
+
+.produtos-erro {
+  color: #c62828;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .produtos-container {
+    padding: 5px;
+  }
+
+  .produto-card {
+    padding: 18px;
+  }
+
+  .produtos-header h1 {
+    font-size: 25px;
+  }
+  
+}
+
+.produtos-section {
+  margin-top: 28px;
+}
+
+.produtos-section > h2 {
+  color: #23466b;
+  font-size: 21px;
+  margin-bottom: 18px;
+}
+
+.produtos-erro {
+  padding: 12px 16px;
+  background: #fff1f0;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #c62828;
+}
+
+.produtos-container h1,
+.produtos-container h2 {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
