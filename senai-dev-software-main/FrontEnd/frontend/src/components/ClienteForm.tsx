@@ -22,7 +22,6 @@ export default function ClienteForm({ onClienteCriado }: Props) {
   }
   return (
   <form onSubmit={handleSubmit}>
-    <h2>Cadastrar Cliente</h2>
     {erro && <p>{erro}</p>}
 
     <label htmlFor="nome">Nome</label>

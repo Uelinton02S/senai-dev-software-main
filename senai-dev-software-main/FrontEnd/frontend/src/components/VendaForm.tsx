@@ -59,7 +59,7 @@ export default function VendaForm({ onVendaCriado }: Props) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Realizar Venda</h2>
+    
       {erro && <p style={{ color: 'red' }}>{erro}</p>}
 
 
