@@ -66,6 +66,8 @@ builder.Services.AddScoped<IDepartamentoService, DepartamentoService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 var app = builder.Build();
 
