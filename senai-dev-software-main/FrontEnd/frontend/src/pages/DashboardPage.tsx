@@ -76,7 +76,7 @@ const linha = (colunas: string) => ({
 
       <div style={linha('2fr 1fr')}>
         <GraficoVendas dados={vendasDia} />
-        <TopProdutos dados={top} />
+        <TopProdutos dados={top as unknown as VendasPorDia[]} />
       </div>
       <div style={linha('2fr 1fr')}>
         <UltimasVendas dados={ultimas} />

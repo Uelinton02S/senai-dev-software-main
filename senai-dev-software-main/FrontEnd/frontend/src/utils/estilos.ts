@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react'
+import type { CSSProperties } from 'react'
 
 // Estilo de "cartão branco" reaproveitado em todos os blocos
 export const painel: CSSProperties = {
