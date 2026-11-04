@@ -4,8 +4,6 @@ using MinhaApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-
-
 namespace MinhaApi.Controllers
 {
     [Authorize]
@@ -30,7 +28,6 @@ namespace MinhaApi.Controllers
                 idproduto = v.idprodutos,
                 idcliente = v.idclientes,
                 quantidade = v.quantidade,
-               
             });
 
             return Ok(vendaResponses);
@@ -51,7 +48,6 @@ namespace MinhaApi.Controllers
                 idproduto = venda.idprodutos,
                 idcliente = venda.idclientes,
                 quantidade = venda.quantidade,
-             
             };
 
             return Ok(vendaResponse);
@@ -60,13 +56,11 @@ namespace MinhaApi.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] VendaRequest request) 
         {
-            
             var novaVenda = new Venda
             {
-                idprodutos = request.idproduto,
-                idclientes = request.idcliente,
+                idprodutos = request.idprodutos,
+                idclientes = request.idclientes,
                 quantidade = request.quantidade,
-                
             };
 
             var vendaCriada = _vendaService.Create(novaVenda);
@@ -76,7 +70,6 @@ namespace MinhaApi.Controllers
                 idproduto = vendaCriada.idprodutos,
                 idcliente = vendaCriada.idclientes,
                 quantidade = vendaCriada.quantidade,
-         
             };
 
             return CreatedAtAction(
@@ -89,13 +82,11 @@ namespace MinhaApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] VendaRequest request)
         {
-            
             var dadosAtualizados = new Venda
             {
-                idprodutos = request.idproduto,
-                idclientes = request.idcliente,
+                idprodutos = request.idprodutos,
+                idclientes = request.idclientes,
                 quantidade = request.quantidade,
-           
             };
 
             var vendaAtualizada = _vendaService.Update(id, dadosAtualizados);

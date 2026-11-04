@@ -9,24 +9,27 @@ import VendasPage from './pages/vendasPage'
 import DepartamentoPage from './pages/DepartamentoPage'
 import DashboardPage from './pages/DashboardPage'
 
-
 function Layout() {
   const { isAuthenticated } = useAuth()
+
   return (
     <div style={{ display: 'flex' }}>
       {isAuthenticated && <Sidebar />}
       <main style={{ flex: 1, padding: '24px' }}>
         <Routes>
-          
-
-<Route path="/" element={<Navigate to="/dashboard" replace />} />
-
-<Route path="/dashboard" element={
-  <ProtectedRoute><DashboardPage /></ProtectedRoute>
-} />
-          <Route path="/login" element={<LoginPage />} />
+          {/* Rota inicial redireciona para o Dashboard */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          if (isAuthenticated) return <Navigate to="/dashboard" replace />
+
+          {/* Se o usuário já estiver logado e tentar ir para /login, ele é jogado para o dashboard */}
+          <Route 
+            path="/login" 
+            element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />} 
+          />
+
+          {/* Rotas Protegidas */}
+          <Route path="/dashboard" element={
+            <ProtectedRoute><DashboardPage /></ProtectedRoute>
+          } />
           <Route path="/produtos" element={
             <ProtectedRoute><ProdutosPage /></ProtectedRoute>
           } />
@@ -39,6 +42,9 @@ function Layout() {
           <Route path="/departamento" element={
             <ProtectedRoute><DepartamentoPage /></ProtectedRoute>
           } />
+
+          {/* Rota de "Não Encontrado" (Opcional, captura links errados) */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
     </div>
@@ -54,4 +60,5 @@ function App() {
     </BrowserRouter>
   )
 }
+
 export default App

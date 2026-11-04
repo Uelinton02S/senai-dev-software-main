@@ -1,3 +1,4 @@
+
 using MinhaApi.Models;
 using MinhaApi.Repositories;
 using MySqlConnector;
@@ -22,8 +23,8 @@ public class VendaRepository : IVendaRepository
             SELECT 
                 id,
                 data_venda,
-                idclientes,
-                idprodutos,
+                clientes_id,
+                produtos_id,
                 quantidade
             FROM vendas";
 
@@ -36,8 +37,8 @@ public class VendaRepository : IVendaRepository
             {
                 id = reader.GetInt32("id"),
                 data_venda = reader.GetDateTime("data_venda"),
-                idclientes = reader.GetInt32("idclientes"),
-                idprodutos = reader.GetInt32("idprodutos"),
+                idclientes = reader.GetInt32("clientes_id"),
+                idprodutos = reader.GetInt32("produtos_id"),
                 quantidade = reader.GetInt32("quantidade")
             });
         }
@@ -54,8 +55,8 @@ public class VendaRepository : IVendaRepository
             SELECT 
                 id,
                 data_venda,
-                idclientes,
-                idprodutos,
+                clientes_id,
+                produtos_id,
                 quantidade
             FROM vendas
             WHERE id = @id";
@@ -72,8 +73,8 @@ public class VendaRepository : IVendaRepository
             {
                 id = reader.GetInt32("id"),
                 data_venda = reader.GetDateTime("data_venda"),
-                idclientes = reader.GetInt32("idclientes"),
-                idprodutos = reader.GetInt32("idprodutos"),
+                idclientes = reader.GetInt32("clientes_id"),
+                idprodutos = reader.GetInt32("produtos_id"),
                 quantidade = reader.GetInt32("quantidade")
             };
         }
@@ -88,9 +89,9 @@ public class VendaRepository : IVendaRepository
 
         string sql = @"
             INSERT INTO vendas 
-                (data_venda, idclientes, idprodutos, quantidade)
+                (data_venda, clientes_id, produtos_id, quantidade, valor_total)
             VALUES 
-                (@Data, @idclientes, @idprodutos, @Quantidade)";
+                (@Data, @idclientes, @idprodutos, @Quantidade, @ValorTotal)";
 
         using var cmd = new MySqlCommand(sql, conn);
 
@@ -98,6 +99,7 @@ public class VendaRepository : IVendaRepository
         cmd.Parameters.AddWithValue("@idclientes", venda.idclientes);
         cmd.Parameters.AddWithValue("@idprodutos", venda.idprodutos);
         cmd.Parameters.AddWithValue("@Quantidade", venda.quantidade);
+        cmd.Parameters.AddWithValue("@ValorTotal", venda.ValorTotal);
 
         cmd.ExecuteNonQuery();
 
@@ -113,9 +115,10 @@ public class VendaRepository : IVendaRepository
             UPDATE vendas 
             SET 
                 data_venda = @Data,
-                idclientes = @idclientes,
-                idprodutos = @idprodutos,
-                quantidade = @Quantidade
+                clientes_id = @idclientes,
+                produtos_id = @idprodutos,
+                quantidade = @Quantidade,
+                valor_total = @ValorTotal
             WHERE id = @id";
 
         using var cmd = new MySqlCommand(sql, conn);
@@ -124,6 +127,7 @@ public class VendaRepository : IVendaRepository
         cmd.Parameters.AddWithValue("@idclientes", venda.idclientes);
         cmd.Parameters.AddWithValue("@idprodutos", venda.idprodutos);
         cmd.Parameters.AddWithValue("@Quantidade", venda.quantidade);
+        cmd.Parameters.AddWithValue("@ValorTotal", venda.ValorTotal);
         cmd.Parameters.AddWithValue("@id", venda.id);
 
         cmd.ExecuteNonQuery();
