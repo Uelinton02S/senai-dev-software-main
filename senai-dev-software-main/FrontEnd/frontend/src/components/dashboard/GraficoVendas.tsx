@@ -1,6 +1,6 @@
 import { ResponsiveContainer, LineChart, Line, XAxis,
          YAxis, Tooltip, CartesianGrid } from 'recharts'
-import type{ VendasPorDia } from '../../types/Dashboard'
+import type { VendasPorDia } from '../../types/Dashboard'
 import { formatarMoeda, formatarDiaMes } from '../../utils/formatadores'
 import { painel } from '../../utils/estilos'
 

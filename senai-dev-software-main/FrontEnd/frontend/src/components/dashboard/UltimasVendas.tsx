@@ -1,4 +1,4 @@
-import { UltimaVenda } from '../../types/Dashboard'
+import type{ UltimaVenda } from '../../types/Dashboard'
 import { formatarMoeda, formatarDataHora } from '../../utils/formatadores'
 import { painel } from '../../utils/estilos'
 
