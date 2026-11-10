@@ -9,6 +9,7 @@ export interface Produto {
   preco: number
   estoque: number
   ativo: boolean
+  fotoBase64?: string
 }
 
 
