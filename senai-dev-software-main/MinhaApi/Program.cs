@@ -69,7 +69,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 
-builder.Services.AddScoped<IFotoService, FotoService>(); // ✨
+builder.Services.AddScoped<IFotoService, FotoService>(); 
 
 
 var app = builder.Build();
@@ -82,7 +82,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("ReactPolicy");
 app.UseAuthentication();  // 1º quem é você?
-app.UseAuthorization();   //// 2º você pode entrar?
+app.UseAuthorization();
+app.UseStaticFiles();   //// 2º você pode entrar?
 app.MapControllers();
 
 
