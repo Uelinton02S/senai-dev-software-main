@@ -18,13 +18,14 @@ function ProdutoForm({ onProdutoCriado }: Props) {
   const [preco, setPreco] = useState('')
   const [estoque, setEstoque] = useState(0)
 
+  const [arquivoFoto, setArquivoFoto] = useState<File | null>(null)
+
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
 
   const [fotoBase64Atual, setFotoBase64Atual] =
     useState<string | null>(null)
 
-  // Carregar produto para edição
   async function carregarProduto() {
     if (!id) return
 
@@ -36,7 +37,7 @@ function ProdutoForm({ onProdutoCriado }: Props) {
       setEstoque(produto.estoque)
       setFotoBase64Atual(produto.fotoBase64 ?? null)
     } catch (error) {
-      console.error('Erro ao carregar produto:', error)
+      console.error(error)
       setErro('Não foi possível carregar o produto.')
     }
   }
@@ -47,7 +48,6 @@ function ProdutoForm({ onProdutoCriado }: Props) {
     }
   }, [id])
 
-  // Cadastrar ou atualizar produto
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setErro(null)
@@ -67,21 +67,39 @@ function ProdutoForm({ onProdutoCriado }: Props) {
         ativo: true,
       }
 
-      if (modoEdicao && id) {
-        await produtoService.atualizar(Number(id), dados)
-      } else {
-        await produtoService.criar(dados)
+      let produtoSalvo
 
-        setNome('')
-        setPreco('')
-        setEstoque(0)
+      if (modoEdicao && id) {
+        produtoSalvo = await produtoService.atualizar(
+          Number(id),
+          dados
+        )
+      } else {
+        produtoSalvo = await produtoService.criar(dados)
       }
+
+      // Enviar foto depois de salvar o produto
+      if (arquivoFoto) {
+        await produtoService.uploadFoto(
+          produtoSalvo.id,
+          arquivoFoto
+        )
+      }
+
+      setNome('')
+      setPreco('')
+      setEstoque(0)
+      setArquivoFoto(null)
 
       onProdutoCriado()
 
+      if (modoEdicao) {
+        await carregarProduto()
+      }
+
     } catch (error) {
       console.error('Erro ao salvar produto:', error)
-      setErro('Erro ao salvar. Verifique a API e tente novamente.')
+      setErro('Erro ao salvar produto ou enviar a foto.')
     } finally {
       setLoading(false)
     }
@@ -89,7 +107,6 @@ function ProdutoForm({ onProdutoCriado }: Props) {
 
   return (
     <div className="produto-form-container">
-
       <form onSubmit={handleSubmit}>
 
         <h2>
@@ -102,7 +119,6 @@ function ProdutoForm({ onProdutoCriado }: Props) {
 
         <div>
           <label htmlFor="nome">Nome</label>
-
           <input
             id="nome"
             type="text"
@@ -115,7 +131,6 @@ function ProdutoForm({ onProdutoCriado }: Props) {
 
         <div>
           <label htmlFor="preco">Preço (R$)</label>
-
           <input
             id="preco"
             type="number"
@@ -130,7 +145,6 @@ function ProdutoForm({ onProdutoCriado }: Props) {
 
         <div>
           <label htmlFor="estoque">Estoque</label>
-
           <input
             id="estoque"
             type="number"
@@ -140,6 +154,29 @@ function ProdutoForm({ onProdutoCriado }: Props) {
             required
           />
         </div>
+
+        <div>
+          <label htmlFor="foto">Foto do produto</label>
+          <input
+            id="foto"
+            type="file"
+            accept="image/*"
+            onChange={(e) =>
+              setArquivoFoto(e.target.files?.[0] ?? null)
+            }
+          />
+        </div>
+
+        {arquivoFoto && (
+          <div>
+            <p>Foto selecionada: {arquivoFoto.name}</p>
+            <img
+              src={URL.createObjectURL(arquivoFoto)}
+              alt="Prévia do produto"
+              width="120"
+            />
+          </div>
+        )}
 
         <button type="submit" disabled={loading}>
           {loading
@@ -151,7 +188,6 @@ function ProdutoForm({ onProdutoCriado }: Props) {
 
       </form>
 
-      {/* Upload da foto somente na edição */}
       {modoEdicao && id && (
         <FotoUpload
           produtoId={Number(id)}
@@ -159,7 +195,6 @@ function ProdutoForm({ onProdutoCriado }: Props) {
           onAtualizar={carregarProduto}
         />
       )}
-
     </div>
   )
 }

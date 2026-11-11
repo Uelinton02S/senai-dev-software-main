@@ -83,7 +83,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("ReactPolicy");
 app.UseAuthentication();  // 1º quem é você?
 app.UseAuthorization();
-app.UseStaticFiles();   //// 2º você pode entrar?
+  //// 2º você pode entrar?
 app.MapControllers();
 
 
