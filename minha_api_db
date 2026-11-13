@@ -1,3 +1,4 @@
+
 CREATE DATABASE IF NOT EXISTS minha_api_db;
 USE minha_api_db;
 
@@ -9,84 +10,100 @@ CREATE TABLE IF NOT EXISTS produtos (
     ativo TINYINT(1) NOT NULL DEFAULT 1
 );
 
-
-INSERT INTO produtos (nome, preco, estoque, ativo) 
-VALUES 
-('Notebook', 3500.00, 10, 1),
-('Mouse Gamer', 120.50, 45, 1),
-('Teclado gamer',150.20,35,1);
-
 CREATE TABLE IF NOT EXISTS clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    Cpf INT,
-	ativo TINYINT(1) NOT NULL DEFAULT 1
+    cpf VARCHAR(11),
+    ativo TINYINT(1) NOT NULL DEFAULT 1
 );
 
-INSERT INTO clientes (nome, email, CPF, ativo) 
-VALUES 
-('João','João@email.com', 123456789, 1),
-('Maria', 'Maria@email.com', 987654321, 1);
-
-
-CREATE TABLE IF NOT EXISTS vendas (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	data_venda DATETIME,
-	idclientes INT,
-	idprodutos INT,
-	quantidade INT NOT NULL,
-    FOREIGN KEY(idclientes) REFERENCES clientes(id),
-    FOREIGN KEY(idprodutos) REFERENCES produtos(id)
-);
-
-CREATE TABLE IF NOT EXISTS  fornecedores (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  nome VARCHAR (100) NOT NULL,
-  cnpj VARCHAR (14),
-  data_venda DATETIME,
-  bairro VARCHAR(100),
-  cidade VARCHAR(100),
-  cep INT (10),
-  numero INT,
-  complemento VARCHAR (150),
-  celular VARCHAR (20),
-  telefone VARCHAR (20),
-  email VARCHAR(50),
-  ativo TINYINT(1) NOT NULL DEFAULT 1
-
+CREATE TABLE IF NOT EXISTS fornecedores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cnpj VARCHAR(14),
+    data_venda DATETIME,
+    bairro VARCHAR(100),
+    cidade VARCHAR(100),
+    cep VARCHAR(10),
+    numero INT,
+    complemento VARCHAR(150),
+    celular VARCHAR(20),
+    telefone VARCHAR(20),
+    email VARCHAR(100),
+    ativo TINYINT(1) NOT NULL DEFAULT 1
 );
 
 CREATE TABLE IF NOT EXISTS departamento (
-     id INT AUTO_INCREMENT PRIMARY KEY,
-     idfornecedores INT,
-     iddepartamento INT,
-     nome VARCHAR (100) NOT NULL,
-     descricao VARCHAR (100) NOT NULL,
-     telefone VARCHAR (20),
-     email VARCHAR (100),
-     ativo TINYINT(1) NOT NULL DEFAULT 1,
-     
-     FOREIGN KEY(idfornecedores) REFERENCES fornecedores(id),
-	 FOREIGN KEY(iddepartamento) REFERENCES departamento(id)
-     
-	 
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idfornecedores INT,
+    nome VARCHAR(100) NOT NULL,
+    descricao VARCHAR(100) NOT NULL,
+    telefone VARCHAR(20),
+    email VARCHAR(100),
+    ativo TINYINT(1) NOT NULL DEFAULT 1,
+    FOREIGN KEY (idfornecedores) REFERENCES fornecedores(id)
 );
 
-	  SELECT * FROM clientes;
-	  SELECT * FROM vendas;
-	  SELECT * FROM produtos;
-	  SELECT * FROM fornecedores;
-      SELECT * FROM departamento;
-      
-  
-    INSERT INTO produtos (idclientes, idprodutos, data_venda, quantidade, ativo) 
-	VALUES('1','1','2026-09-09','5','1'); 
-    
-    UPDATE produtos
-    SET estoque = estoque - 1
-    
-  
+CREATE TABLE IF NOT EXISTS vendas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome_produto VARCHAR(100),
+    data_venda DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    clientes_id INT NOT NULL,
+    produtos_id INT NOT NULL,
+    quantidade INT NOT NULL,
+    valor_total INT NOT NULL,
+    FOREIGN KEY (clientes_id) REFERENCES clientes(id),
+    FOREIGN KEY (produtos_id) REFERENCES produtos(id)
+);
 
+CREATE TABLE IF NOT EXISTS usuarios (
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    nome       VARCHAR(100) NOT NULL,
+    email      VARCHAR(150) NOT NULL UNIQUE,
+    senha_hash VARCHAR(255) NOT NULL,
+    ativo      TINYINT(1)   NOT NULL DEFAULT 1
+);
+INSERT INTO usuarios (nome, email, senha_hash)
+VALUES ('Admin SENAI', 'admin@senai.com',
+        '$2a$11$aoiNQxlsdC0ot4whb/U9Z.19fvR.I8wLuKimDDtgbachmyV3PN7lC');
 
+INSERT INTO produtos (nome, preco, estoque, ativo)
+VALUES
+('Notebook', 3500.00, 10, 1),
+('Mouse Gamer', 120.50, 45, 1),
+('Teclado gamer', 150.20, 35, 1);
 
+INSERT INTO clientes (nome, email, cpf, ativo)
+VALUES
+('João', 'João@email.com', '00123456789', 1),
+('Maria', 'Maria@email.com', '00987654321', 1);
+
+INSERT INTO vendas (idclientes, idprodutos, quantidade)
+VALUES (1, 1, 5);
+
+UPDATE produtos
+SET estoque = estoque - 5
+WHERE id = 1;
+
+CREATE INDEX idx_vendas_data ON vendas (data_venda);
+
+SELECT DATE(data_venda) AS dia, COUNT(*), SUM(valor_total)
+FROM vendas
+GROUP BY DATE(data_venda)
+ORDER BY dia;
+
+ALTER TABLE produtos
+  ADD COLUMN foto VARCHAR(255) NULL;
+
+DESCRIBE produtos;
+
+SELECT * FROM produtos;
+SELECT * FROM usuarios;
+SELECT * FROM clientes;
+SELECT * FROM vendas;
+
+SELECT id, nome, foto FROM produtos LIMIT 5;
+
+SELECT * FROM fornecedores;
+SELECT * FROM departamento;
